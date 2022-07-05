@@ -1,0 +1,25 @@
+package com.zebrunner.crypto;
+
+import java.security.NoSuchAlgorithmException;
+
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+
+import org.apache.commons.codec.binary.Base64;
+
+class SecretKeyManager {
+
+    private SecretKeyManager() {
+    }
+
+    public static SecretKey generateKey(Algorithm algorithm, int size) throws NoSuchAlgorithmException {
+        KeyGenerator keyGenerator = KeyGenerator.getInstance(algorithm.getName());
+        keyGenerator.init(size);
+        return keyGenerator.generateKey();
+    }
+
+    public static SecretKey getKeyFromString(Algorithm algorithm, String key) {
+        return new SecretKeySpec(Base64.decodeBase64(key), algorithm.getName());
+    }
+}
