@@ -1,6 +1,7 @@
 package com.zebrunner.crypto;
 
 import java.lang.invoke.MethodHandles;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
@@ -11,6 +12,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.IvParameterSpec;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
@@ -47,9 +49,9 @@ class CryptoToolImpl implements CryptoTool {
     @Override
     public String encrypt(String str) {
         try {
-            cipher.init(Cipher.ENCRYPT_MODE, key);
+            cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(new byte[16]));
             return new String(Base64.encodeBase64(cipher.doFinal(Base64.encodeBase64(str.getBytes()))));
-        } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
+        } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException | InvalidAlgorithmParameterException e) {
             throw new RuntimeException("Error while encrypting, check your crypto key! ", e);
         }
 
@@ -58,9 +60,9 @@ class CryptoToolImpl implements CryptoTool {
     @Override
     public String decrypt(String str) {
         try {
-            cipher.init(Cipher.DECRYPT_MODE, key);
-            return new String(Base64.encodeBase64(cipher.doFinal(Base64.decodeBase64(str.getBytes()))));
-        } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
+            cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(new byte[16]));
+            return new String(Base64.decodeBase64(cipher.doFinal(Base64.decodeBase64(str.getBytes()))));
+        } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException | InvalidAlgorithmParameterException e) {
             throw new RuntimeException("Error while decrypting, check your crypto key! ", e);
         }
     }

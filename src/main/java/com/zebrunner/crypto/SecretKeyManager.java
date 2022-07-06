@@ -26,6 +26,6 @@ class SecretKeyManager {
 
     public static SecretKey getKeyFromString(Algorithm algorithm, String key) {
         byte[] decodedKey = Base64.decodeBase64(key);
-        return new SecretKeySpec(decodedKey, 0, decodedKey.length, algorithm.getType());
+        return new SecretKeySpec(decodedKey, algorithm.getType());
     }
 }
