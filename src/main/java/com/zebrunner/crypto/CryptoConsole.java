@@ -27,7 +27,6 @@ public class CryptoConsole {
     public static final Algorithm DEFAULT_ALGORITHM = Algorithm.AES_ECB_PKCS5_PADDING;
     public static final Pattern DEFAULT_PATTERN = Pattern.compile("[{]crypt[:](?<data>.+)[}]");
     public static final String DEFAULT_WRAPPER = "{crypto:%s}";
-    public static final int DEFAULT_KEY_SIZE = 128;
 
     private static final String HELP_ARG = "help";
     private static final String ENCRYPT_ARG = "encrypt";
@@ -54,7 +53,7 @@ public class CryptoConsole {
 
             if (line.hasOption(GENERATE_KEY_ARG)) {
                 Algorithm algorithm = parseAlgorithm(line);
-                SecretKey secretKey = SecretKeyManager.generateKey(algorithm, algorithm.getSize());
+                SecretKey secretKey = SecretKeyManager.generateKey(algorithm.getType(), algorithm.getSize());
                 LOGGER.info("Secret key was successfully generated. Copy it for future usage:   {}", secretKey);
                 return;
             }
@@ -166,5 +165,4 @@ public class CryptoConsole {
         options.addOption(Option.builder().hasArg(true).numberOfArgs(1).argName(PATTERN).longOpt(PATTERN).hasArg().desc("pattern").build());
         return options;
     }
-
 }

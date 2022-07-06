@@ -13,8 +13,8 @@ class SecretKeyManager {
     private SecretKeyManager() {
     }
 
-    public static SecretKey generateKey(Algorithm algorithm, int size) throws NoSuchAlgorithmException {
-        KeyGenerator keyGenerator = KeyGenerator.getInstance(algorithm.getName());
+    public static SecretKey generateKey(String algorithmType, int size) throws NoSuchAlgorithmException {
+        KeyGenerator keyGenerator = KeyGenerator.getInstance(algorithmType);
         keyGenerator.init(size);
         return keyGenerator.generateKey();
     }
