@@ -50,7 +50,7 @@ public class CryptoToolBuilder {
     }
 
     private void validate() {
-        if (key == null || keyAsString.isEmpty()) {
+        if (key == null && keyAsString.isEmpty()) {
             throw new RuntimeException("The key must be passed!");
         }
         if (algorithm == null) {
