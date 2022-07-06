@@ -39,7 +39,6 @@ public class CryptoConsole {
     private static final String KEY_ARG = "key";
     private static final String WRAPPER = "wrapper";
     private static final String PATTERN = "pattern";
-    private static final String KEY_SIZE = "size";
 
     public static void main(String[] args) {
         CommandLineParser parser = new DefaultParser();
@@ -54,7 +53,8 @@ public class CryptoConsole {
             }
 
             if (line.hasOption(GENERATE_KEY_ARG)) {
-                SecretKey secretKey = SecretKeyManager.generateKey(parseAlgorithm(line), parseKeySize(line));
+                Algorithm algorithm = parseAlgorithm(line);
+                SecretKey secretKey = SecretKeyManager.generateKey(algorithm, algorithm.getSize());
                 LOGGER.info("Secret key was successfully generated. Copy it for future usage:   {}", secretKey);
                 return;
             }
@@ -124,14 +124,6 @@ public class CryptoConsole {
         }
     }
 
-    private static int parseKeySize(CommandLine line) {
-        if (!line.hasOption(KEY_SIZE)) {
-            LOGGER.warn("The key size is not specified. The default key size will be used: '{}'. To specify key size, use the option '{}'",
-                    DEFAULT_KEY_SIZE, KEY_SIZE);
-        }
-        return line.hasOption(KEY_SIZE) ? Integer.parseInt(line.getOptionValue(KEY_SIZE)) : DEFAULT_KEY_SIZE;
-    }
-
     private static Algorithm parseAlgorithm(CommandLine line) {
         if (!line.hasOption(ALGORITHM)) {
             LOGGER.warn("The pattern is not specified. The default algorithm will be used: '{}'. To specify algorithm, use the option '{}'",
@@ -172,7 +164,6 @@ public class CryptoConsole {
         options.addOption(Option.builder().hasArg(true).numberOfArgs(1).argName(KEY_ARG).longOpt(KEY_ARG).hasArg().desc("secret key").build());
         options.addOption(Option.builder().hasArg(true).numberOfArgs(1).argName(WRAPPER).longOpt(WRAPPER).hasArg().desc("wrapper").build());
         options.addOption(Option.builder().hasArg(true).numberOfArgs(1).argName(PATTERN).longOpt(PATTERN).hasArg().desc("pattern").build());
-        options.addOption(Option.builder().hasArg(true).numberOfArgs(1).argName(KEY_SIZE).longOpt(KEY_SIZE).hasArg().desc("key size").build());
         return options;
     }
 
