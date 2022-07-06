@@ -6,8 +6,6 @@ import java.lang.invoke.MethodHandles;
 import java.security.NoSuchAlgorithmException;
 import java.util.regex.Pattern;
 
-import javax.crypto.SecretKey;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -15,7 +13,6 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.Level;
@@ -58,9 +55,8 @@ public class CryptoConsole {
 
             if (line.hasOption(GENERATE_KEY_ARG)) {
                 Algorithm algorithm = parseAlgorithm(line);
-                SecretKey secretKey = SecretKeyManager.generateKey(algorithm.getType(), algorithm.getSize());
-                LOGGER.info("Secret key was successfully generated. Copy it:   {}",
-                        new String(Base64.encodeBase64(secretKey.getEncoded())));
+                String secretKey = SecretKeyManager.generateKeyAsString(algorithm.getType(), algorithm.getSize());
+                LOGGER.info("Secret key was successfully generated. Copy it:   {}", secretKey);
                 return;
             }
 
@@ -113,7 +109,14 @@ public class CryptoConsole {
             }
 
             if (line.hasOption(STRING_ARG)) {
-                LOGGER.info("Decrypted string: {}", cryptoTool.decrypt(line.getOptionValue(STRING_ARG)));
+                if (line.hasOption(ENCRYPT_ARG)) {
+                    LOGGER.info("Passed string: {}", line.getOptionValue(STRING_ARG));
+                    LOGGER.info("Encrypted string: {}", cryptoTool.encrypt(line.getOptionValue(STRING_ARG)));
+
+                } else if (line.hasOption(DECRYPT_ARG)) {
+                    LOGGER.info("Passed encrypted string: {}", line.getOptionValue(STRING_ARG));
+                    LOGGER.info("Decrypted string: {}", cryptoTool.decrypt(line.getOptionValue(STRING_ARG)));
+                }
                 return;
             }
         } catch (IOException | ParseException | NoSuchAlgorithmException e) {

@@ -48,7 +48,7 @@ class CryptoToolImpl implements CryptoTool {
     public String encrypt(String str) {
         try {
             cipher.init(Cipher.ENCRYPT_MODE, key);
-            return Base64.encodeBase64String(cipher.doFinal(str.getBytes()));
+            return new String(Base64.encodeBase64(cipher.doFinal(Base64.encodeBase64(str.getBytes()))));
         } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
             throw new RuntimeException("Error while encrypting, check your crypto key! ", e);
         }
@@ -59,7 +59,7 @@ class CryptoToolImpl implements CryptoTool {
     public String decrypt(String str) {
         try {
             cipher.init(Cipher.DECRYPT_MODE, key);
-            return new String(cipher.doFinal(Base64.decodeBase64(str.getBytes())));
+            return new String(Base64.encodeBase64(cipher.doFinal(Base64.decodeBase64(str.getBytes()))));
         } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
             throw new RuntimeException("Error while decrypting, check your crypto key! ", e);
         }

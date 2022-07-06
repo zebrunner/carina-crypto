@@ -19,7 +19,13 @@ class SecretKeyManager {
         return keyGenerator.generateKey();
     }
 
+    public static String generateKeyAsString(String algorithmType, int size) throws NoSuchAlgorithmException {
+        SecretKey secretKey = generateKey(algorithmType, size);
+        return new String(Base64.encodeBase64(secretKey.getEncoded()));
+    }
+
     public static SecretKey getKeyFromString(Algorithm algorithm, String key) {
-        return new SecretKeySpec(Base64.decodeBase64(key), algorithm.getName());
+        byte[] decodedKey = Base64.decodeBase64(key);
+        return new SecretKeySpec(decodedKey, 0, decodedKey.length, algorithm.getType());
     }
 }
