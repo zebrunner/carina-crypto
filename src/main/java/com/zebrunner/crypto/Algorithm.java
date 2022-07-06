@@ -28,7 +28,7 @@ public enum Algorithm {
         return name;
     }
 
-    public Algorithm fromString(String algorithmAsText) {
+    public static Algorithm fromString(String algorithmAsText) {
         for (Algorithm algorithm : Algorithm.values()) {
             if (algorithm.name.equalsIgnoreCase(algorithmAsText)) {
                 return algorithm;
