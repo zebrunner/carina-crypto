@@ -25,14 +25,17 @@ class CryptoToolImpl implements CryptoTool {
     // private static final Pattern ENCRYPTED_DATA_PATTERN = Pattern.compile("[{](?<wildcard>.+)[:](?<data>.+)[}]");
     private Cipher cipher;
     private final Key key;
+    private Algorithm algorithm;
 
     CryptoToolImpl(Algorithm algorithm, Key key) {
         initCipher(algorithm);
+        this.algorithm = algorithm;
         this.key = key;
     }
 
     CryptoToolImpl(Algorithm algorithm, String key) {
         initCipher(algorithm);
+        this.algorithm = algorithm;
         this.key = SecretKeyManager.getKeyFromString(algorithm, key);
     }
 
@@ -49,7 +52,11 @@ class CryptoToolImpl implements CryptoTool {
     @Override
     public String encrypt(String str) {
         try {
-            cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(new byte[16]));
+            if (algorithm.getMode().equals("ECB")) {
+                cipher.init(Cipher.ENCRYPT_MODE, key);
+            } else {
+                cipher.init(Cipher.ENCRYPT_MODE, key, new IvParameterSpec(new byte[16]));
+            }
             return new String(Base64.encodeBase64(cipher.doFinal(Base64.encodeBase64(str.getBytes()))));
         } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException | InvalidAlgorithmParameterException e) {
             throw new RuntimeException("Error while encrypting, check your crypto key! ", e);
@@ -60,8 +67,14 @@ class CryptoToolImpl implements CryptoTool {
     @Override
     public String decrypt(String str) {
         try {
-            cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(new byte[16]));
+            if (algorithm.getMode().equals("ECB")) {
+                cipher.init(Cipher.DECRYPT_MODE, key);
+            } else {
+                cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(new byte[16]));
+            }
+
             return new String(Base64.decodeBase64(cipher.doFinal(Base64.decodeBase64(str.getBytes()))));
+
         } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException | InvalidAlgorithmParameterException e) {
             throw new RuntimeException("Error while decrypting, check your crypto key! ", e);
         }
