@@ -13,9 +13,10 @@ public enum Algorithm {
     DESEDE_CBC_NO_PADDING("DESede/CBC/NoPadding", "DESede", 168),
     DESEDE_CBC_PKCS5_PADDING("DESede/CBC/PKCS5Padding", "DESede", 168),
     DESEDE_ECB_NO_PADDING("DESede/ECB/NoPadding", "DESede", 168),
-    DESEDE_ECB_PKCS5_PADDING("DESede/ECB/PKCS5Padding", "DESede", 168),
-    RSA_ECB_PKCS1_PADDING("RSA/ECB/PKCS1Padding", "RSA", 2048),
-    RSA_ECB_OAEP_PADDING("RSA/ECB/OAEPPadding", "RSA", 2048);
+    DESEDE_ECB_PKCS5_PADDING("DESede/ECB/PKCS5Padding", "DESede", 168);
+    // todo investigate to use KeyPairGenerator
+    // RSA_ECB_PKCS1_PADDING("RSA/ECB/PKCS1Padding", "RSA", 2048),
+    // RSA_ECB_OAEP_PADDING("RSA/ECB/OAEPPadding", "RSA", 2048);
 
     private final String name;
     private final int size;

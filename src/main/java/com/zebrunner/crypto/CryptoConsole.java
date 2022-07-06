@@ -15,8 +15,11 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.core.config.Configurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,6 +43,8 @@ public class CryptoConsole {
     private static final String PATTERN = "pattern";
 
     public static void main(String[] args) {
+        Configurator.setRootLevel(Level.INFO);
+
         CommandLineParser parser = new DefaultParser();
         Options options = getOptions();
         try {
@@ -54,7 +59,8 @@ public class CryptoConsole {
             if (line.hasOption(GENERATE_KEY_ARG)) {
                 Algorithm algorithm = parseAlgorithm(line);
                 SecretKey secretKey = SecretKeyManager.generateKey(algorithm.getType(), algorithm.getSize());
-                LOGGER.info("Secret key was successfully generated. Copy it for future usage:   {}", secretKey);
+                LOGGER.info("Secret key was successfully generated. Copy it:   {}",
+                        new String(Base64.encodeBase64(secretKey.getEncoded())));
                 return;
             }
 
