@@ -160,16 +160,19 @@ public class CryptoConsole {
     private static Options getOptions() {
         Options options = new Options();
         options.addOption(HELP_ARG, false, "usage information");
-        options.addOption(Option.builder().argName(ENCRYPT_ARG).longOpt(ENCRYPT_ARG).desc("action for encrypt").build());
-        options.addOption(Option.builder().argName(DECRYPT_ARG).longOpt(DECRYPT_ARG).desc("action for decrypt").build());
-        options.addOption(Option.builder().argName(GENERATE_KEY_ARG).longOpt(GENERATE_KEY_ARG).desc("action to generate key").build());
-        options.addOption(Option.builder().argName(ALGORITHM).longOpt(ALGORITHM).desc("algorithm to encrypt/decrypt/generate key").build());
-        options.addOption(Option.builder().argName(FILE_ARG).longOpt(FILE_ARG).hasArg().desc("file to encrypt/decrypt").build());
-        options.addOption(Option.builder().argName(STRING_ARG).longOpt(STRING_ARG).hasArg().desc("string to encrypt/decrypt").build());
-        options.addOption(Option.builder().argName(KEY_ARG).longOpt(KEY_ARG).hasArg().desc("secret key").build());
-        options.addOption(Option.builder().argName(WRAPPER).longOpt(WRAPPER).hasArg().desc("wrapper").build());
-        options.addOption(Option.builder().argName(PATTERN).longOpt(PATTERN).hasArg().desc("pattern").build());
-        options.addOption(Option.builder().argName(KEY_SIZE).longOpt(KEY_SIZE).hasArg().desc("key size").build());
+        options.addOption(Option.builder().hasArg(false).argName(ENCRYPT_ARG).longOpt(ENCRYPT_ARG).desc("action for encrypt").build());
+        options.addOption(Option.builder().hasArg(false).argName(DECRYPT_ARG).longOpt(DECRYPT_ARG).desc("action for decrypt").build());
+        options.addOption(Option.builder().hasArg(false).argName(GENERATE_KEY_ARG).longOpt(GENERATE_KEY_ARG).desc("action to generate key").build());
+        options.addOption(Option.builder().hasArg(true).numberOfArgs(1).argName(ALGORITHM).longOpt(ALGORITHM)
+                .desc("algorithm to encrypt/decrypt/generate key").build());
+        options.addOption(
+                Option.builder().hasArg(true).numberOfArgs(1).argName(FILE_ARG).longOpt(FILE_ARG).hasArg().desc("file to encrypt/decrypt").build());
+        options.addOption(Option.builder().hasArg(true).numberOfArgs(1).argName(STRING_ARG).longOpt(STRING_ARG).hasArg()
+                .desc("string to encrypt/decrypt").build());
+        options.addOption(Option.builder().hasArg(true).numberOfArgs(1).argName(KEY_ARG).longOpt(KEY_ARG).hasArg().desc("secret key").build());
+        options.addOption(Option.builder().hasArg(true).numberOfArgs(1).argName(WRAPPER).longOpt(WRAPPER).hasArg().desc("wrapper").build());
+        options.addOption(Option.builder().hasArg(true).numberOfArgs(1).argName(PATTERN).longOpt(PATTERN).hasArg().desc("pattern").build());
+        options.addOption(Option.builder().hasArg(true).numberOfArgs(1).argName(KEY_SIZE).longOpt(KEY_SIZE).hasArg().desc("key size").build());
         return options;
     }
 
