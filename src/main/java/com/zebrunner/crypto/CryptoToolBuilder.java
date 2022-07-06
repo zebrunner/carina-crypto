@@ -47,6 +47,7 @@ public class CryptoToolBuilder {
             return new CryptoToolImpl(algorithm, key);
         }
         return new CryptoToolImpl(algorithm, keyAsString);
+
     }
 
     private void validate() {

@@ -24,7 +24,7 @@ public class CryptoConsole {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    public static final Algorithm DEFAULT_ALGORITHM = Algorithm.AES_ECB_PKCS5_PADDING;
+    public static final Algorithm DEFAULT_ALGORITHM = Algorithm.AES;
     public static final Pattern DEFAULT_PATTERN = Pattern.compile("[{]crypt[:](?<data>.+)[}]");
     public static final String DEFAULT_WRAPPER = "{crypto:%s}";
 
