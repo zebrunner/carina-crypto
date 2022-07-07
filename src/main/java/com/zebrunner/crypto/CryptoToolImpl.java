@@ -53,7 +53,8 @@ class CryptoToolImpl implements CryptoTool {
             cipher.init(Cipher.ENCRYPT_MODE, key);
             return new String(Base64.encodeBase64(cipher.doFinal(Base64.encodeBase64(str.getBytes()))));
         } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
-            throw new RuntimeException("Error while encrypting, check your crypto key! ", e);
+            throw new RuntimeException(
+                    "Error while encrypting, check your crypto key or length of string! Try to choose algorithm with bigger key size", e);
         }
     }
 

@@ -1,7 +1,5 @@
 package com.zebrunner.crypto;
 
-import java.util.regex.Pattern;
-
 public interface CryptoTool {
 
     /**

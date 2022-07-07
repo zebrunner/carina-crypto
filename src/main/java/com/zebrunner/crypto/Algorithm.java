@@ -1,23 +1,23 @@
 package com.zebrunner.crypto;
 
 public enum Algorithm {
-    AES_ECB_PKCS5_PADDING("AES/ECB/PKCS5Padding", "AES", 128),  // tested
-    AES_ECB_NO_PADDING("AES/ECB/NoPadding", "AES", 128),
-    AES_ECB_ISO10126PADDING("AES/ECB/ISO10126Padding", "AES", 128),
-    AES_ECB_PKCS1PADDING("AES/ECB/PKCS1Padding", "AES", 128),
 
-    DES_ECB_PKS5_PADDING("DES/ECB/PKCS5Padding", "DES", 56),    // tested
-    DES_ECB_ISO10126PADDING("DES/ECB/ISO10126Padding", "DES", 56),    // tested
-    DES_ECB_PKCS1PADDING("DES/ECB/PKCS1Padding", "DES", 56),
-    DES_ECB_NO_PADDING("DES/ECB/NoPadding", "DES", 56), // tested
+    AES_128_ECB_NO_PADDING("AES/ECB/NoPadding", "AES", 128),
+    AES_128_ECB_PKCS5_PADDING("AES/ECB/PKCS5Padding", "AES", 128),
+    AES_128_ECB_ISO10126PADDING("AES/ECB/ISO10126Padding", "AES", 128),
+    AES_256_ECB_NO_PADDING("AES/ECB/NoPadding", "AES", 256),
+    AES_256_ECB_PKCS5_PADDING("AES/ECB/PKCS5Padding", "AES", 256),
 
-    DESEDE_ECB_PKS5_PADDING("DESede/ECB/PKCS5Padding", "DESede", 168),
-    DESEDE_ECB_NO_PADDING("DESede/ECB/NoPadding", "DESede", 168),
-    DESEDE_ECB_ISO10126PADDING("DESede/ECB/ISO10126Padding", "DESede", 168),
-    DESEDE_ECB_PKCS1PADDING("DESede/ECB/PKCS1Padding", "DESede", 168),
-    RC2_ECB_PKCS1PADDING("RC2", "RC2", 168),// tested
+    DES_56_ECB_PKS5_PADDING("DES/ECB/PKCS5Padding", "DES", 56),
+    DES_56_ECB_ISO10126PADDING("DES/ECB/ISO10126Padding", "DES", 56),
+    DES_56_ECB_NO_PADDING("DES/ECB/NoPadding", "DES", 56),
 
-    ARCFOUR("ARCFOUR", "ARCFOUR", 128); // tested
+    DESEDE_168_ECB_PKS5_PADDING("DESede/ECB/PKCS5Padding", "DESede", 168),
+    DESEDE_168_ECB_NO_PADDING("DESede/ECB/NoPadding", "DESede", 168),
+    DESEDE_168_ECB_ISO10126PADDING("DESede/ECB/ISO10126Padding", "DESede", 168),
+
+    RC2_168("RC2", "RC2", 168),
+    ARCFOUR_128("ARCFOUR", "ARCFOUR", 128);
 
     private final String name;
     private final int size;
@@ -28,6 +28,7 @@ public enum Algorithm {
         this.type = type;
         this.size = size;
     }
+
 
     public String getName() {
         return name;
@@ -41,9 +42,9 @@ public enum Algorithm {
         return size;
     }
 
-    public static Algorithm fromString(String algorithmAsText) {
+    public static Algorithm find(String algorithmAsText, int size) {
         for (Algorithm algorithm : Algorithm.values()) {
-            if (algorithm.name.equalsIgnoreCase(algorithmAsText)) {
+            if (algorithm.name.equalsIgnoreCase(algorithmAsText) && algorithm.size == size) {
                 return algorithm;
             }
         }

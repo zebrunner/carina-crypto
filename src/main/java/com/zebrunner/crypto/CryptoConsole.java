@@ -23,8 +23,7 @@ public class CryptoConsole {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    public static final Algorithm DEFAULT_ALGORITHM = Algorithm.AES_ECB_PKCS5_PADDING;
-    public static final String DEFAULT_PATTERN = "[{]crypt[:](?<data>.+)[}]";
+    public static final String DEFAULT_PATTERN = "\\{crypt:(?<data>.+)\\}";
     public static final String DEFAULT_WRAPPER = "{crypto:%s}";
 
     private static final String HELP_ARG = "help";
@@ -35,6 +34,8 @@ public class CryptoConsole {
     private static final String FILE_ARG = "file";
     private static final String STRING_ARG = "string";
     private static final String KEY_ARG = "key";
+    private static final String KEY_SIZE = "keysize";
+
     private static final String WRAPPER = "wrapper";
     private static final String PATTERN = "pattern";
 
@@ -53,8 +54,8 @@ public class CryptoConsole {
             }
 
             if (line.hasOption(GENERATE_KEY_ARG)) {
-                Algorithm algorithm = parseAlgorithm(line);
-                String secretKey = SecretKeyManager.generateKeyAsString(algorithm.getType(), algorithm.getSize());
+                Algorithm algorithm = parseAlgorithmWithKeySize(line);
+                String secretKey = SecretKeyManager.generateKeyAsString(algorithm);
                 LOGGER.info("Secret key was successfully generated. Copy it:   {}", secretKey);
                 return;
             }
@@ -64,7 +65,7 @@ public class CryptoConsole {
             }
 
             CryptoTool cryptoTool = CryptoToolBuilder.builder()
-                    .chooseAlgorithm(parseAlgorithm(line))
+                    .chooseAlgorithm(parseAlgorithmWithKeySize(line))
                     .setKey(line.getOptionValue(KEY_ARG))
                     .build();
 
@@ -131,12 +132,15 @@ public class CryptoConsole {
         }
     }
 
-    private static Algorithm parseAlgorithm(CommandLine line) {
+    private static Algorithm parseAlgorithmWithKeySize(CommandLine line) {
         if (!line.hasOption(ALGORITHM)) {
-            LOGGER.warn("The pattern is not specified. The default algorithm will be used: '{}'. To specify algorithm, use the option '{}'",
-                    DEFAULT_ALGORITHM, ALGORITHM);
+            throw new RuntimeException("The algorithm is not specified. To specify algorithm, use the option " + ALGORITHM);
         }
-        return line.hasOption(ALGORITHM) ? Algorithm.fromString(line.getOptionValue(ALGORITHM)) : DEFAULT_ALGORITHM;
+
+        if (!line.hasOption(KEY_SIZE)) {
+            throw new RuntimeException("The key size is not specified. To specify algorithm, use the option " + KEY_SIZE);
+        }
+        return Algorithm.find(line.getOptionValue(ALGORITHM), Integer.parseInt(line.getOptionValue(KEY_SIZE)));
     }
 
     private static String parseWrapper(CommandLine line) {
@@ -171,6 +175,8 @@ public class CryptoConsole {
         options.addOption(Option.builder().hasArg(true).numberOfArgs(1).argName(KEY_ARG).longOpt(KEY_ARG).hasArg().desc("secret key").build());
         options.addOption(Option.builder().hasArg(true).numberOfArgs(1).argName(WRAPPER).longOpt(WRAPPER).hasArg().desc("wrapper").build());
         options.addOption(Option.builder().hasArg(true).numberOfArgs(1).argName(PATTERN).longOpt(PATTERN).hasArg().desc("pattern").build());
+        options.addOption(Option.builder().hasArg(true).numberOfArgs(1).argName(KEY_SIZE).longOpt(KEY_SIZE).hasArg().desc("key size").build());
+
         return options;
     }
 }

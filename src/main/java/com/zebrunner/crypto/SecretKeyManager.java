@@ -13,14 +13,14 @@ class SecretKeyManager {
     private SecretKeyManager() {
     }
 
-    public static SecretKey generateKey(String algorithmType, int size) throws NoSuchAlgorithmException {
-        KeyGenerator keyGenerator = KeyGenerator.getInstance(algorithmType);
-        keyGenerator.init(size);
+    public static SecretKey generateKey(Algorithm algorithm) throws NoSuchAlgorithmException {
+        KeyGenerator keyGenerator = KeyGenerator.getInstance(algorithm.getType());
+        keyGenerator.init(algorithm.getSize());
         return keyGenerator.generateKey();
     }
 
-    public static String generateKeyAsString(String algorithmType, int size) throws NoSuchAlgorithmException {
-        SecretKey secretKey = generateKey(algorithmType, size);
+    public static String generateKeyAsString(Algorithm algorithm) throws NoSuchAlgorithmException {
+        SecretKey secretKey = generateKey(algorithm);
         return new String(Base64.encodeBase64(secretKey.getEncoded()));
     }
 
