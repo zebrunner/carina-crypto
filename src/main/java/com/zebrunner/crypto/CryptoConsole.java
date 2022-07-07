@@ -36,7 +36,6 @@ public class CryptoConsole {
     private static final String STRING_ARG = "string";
     private static final String KEY_ARG = "key";
     private static final String KEY_SIZE = "keysize";
-
     private static final String WRAPPER = "wrapper";
     private static final String PATTERN = "pattern";
 

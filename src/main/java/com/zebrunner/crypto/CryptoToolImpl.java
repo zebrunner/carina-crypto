@@ -1,6 +1,5 @@
 package com.zebrunner.crypto;
 
-import java.lang.invoke.MethodHandles;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
@@ -14,13 +13,9 @@ import javax.crypto.NoSuchPaddingException;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 class CryptoToolImpl implements CryptoTool {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-    // private static final Pattern ENCRYPTED_DATA_PATTERN = Pattern.compile("[{](?<wildcard>.+)[:](?<data>.+)[}]");
     protected Cipher cipher;
     protected final Key key;
     protected Algorithm algorithm;
@@ -68,24 +63,16 @@ class CryptoToolImpl implements CryptoTool {
         }
     }
 
-    /**
-     * Encrypt data by pattern
-     * You can use any pattern, but it should have group named data
-     * Return clean encrypted data without wrapper
-     */
     @Override
     public String encrypt(String str, String pattern) {
-        // encrypt without wrapper
         return encrypt(str, pattern, "%s");
     }
 
     @Override
     public String decrypt(String str, String pattern) {
-        // decrypt without wrapper
         return decrypt(str, pattern, "%s");
     }
 
-    // wrapper - use String.format agreement
     @Override
     public String encrypt(String str, String pattern, String wrapper) {
         validatePattern(pattern);
@@ -102,7 +89,6 @@ class CryptoToolImpl implements CryptoTool {
         return str;
     }
 
-    // wrapper - by String.format agreement
     @Override
     public String decrypt(String str, String pattern, String wrapper) {
         validatePattern(pattern);
@@ -119,8 +105,6 @@ class CryptoToolImpl implements CryptoTool {
         return str;
     }
 
-    // todo rename
-    // check is string contains pattern - if yes, it need to be encrypted
     public boolean hasMatch(String str, String pattern) {
         validatePattern(pattern);
         Matcher matcher = Pattern.compile(pattern)

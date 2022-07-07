@@ -42,12 +42,12 @@ public enum Algorithm {
         return size;
     }
 
-    public static Algorithm find(String algorithmAsText, int size) {
+    public static Algorithm find(String algorithmAsText, int keySize) {
         for (Algorithm algorithm : Algorithm.values()) {
-            if (algorithm.name.equalsIgnoreCase(algorithmAsText) && algorithm.size == size) {
+            if (algorithm.name.equalsIgnoreCase(algorithmAsText) && algorithm.size == keySize) {
                 return algorithm;
             }
         }
-        throw new RuntimeException("There are no crypto algorithm with name: " + algorithmAsText);
+        throw new RuntimeException(String.format("There are no crypto algorithm with name: %s and key size %d", algorithmAsText, keySize));
     }
 }
