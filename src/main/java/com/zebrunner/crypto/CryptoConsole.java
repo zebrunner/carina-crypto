@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.security.NoSuchAlgorithmException;
-import java.util.regex.Pattern;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -25,7 +24,7 @@ public class CryptoConsole {
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     public static final Algorithm DEFAULT_ALGORITHM = Algorithm.AES_ECB_PKCS5_PADDING;
-    public static final Pattern DEFAULT_PATTERN = Pattern.compile("[{]crypt[:](?<data>.+)[}]");
+    public static final String DEFAULT_PATTERN = "[{]crypt[:](?<data>.+)[}]";
     public static final String DEFAULT_WRAPPER = "{crypto:%s}";
 
     private static final String HELP_ARG = "help";
@@ -148,12 +147,12 @@ public class CryptoConsole {
         return line.hasOption(WRAPPER) ? line.getOptionValue(WRAPPER) : DEFAULT_WRAPPER;
     }
 
-    private static Pattern parsePattern(CommandLine line) {
+    private static String parsePattern(CommandLine line) {
         if (!line.hasOption(PATTERN)) {
             LOGGER.warn("The pattern is not specified. The default pattern will be used: '{}'. To specify pattern, use the option '{}'",
                     DEFAULT_PATTERN, PATTERN);
         }
-        return line.hasOption(PATTERN) ? Pattern.compile(line.getOptionValue(PATTERN)) : DEFAULT_PATTERN;
+        return line.hasOption(PATTERN) ? line.getOptionValue(PATTERN) : DEFAULT_PATTERN;
 
     }
 

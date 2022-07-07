@@ -73,23 +73,26 @@ class CryptoToolImpl implements CryptoTool {
      * Return clean encrypted data without wrapper
      */
     @Override
-    public String encrypt(String str, Pattern pattern) {
+    public String encrypt(String str, String pattern) {
         // encrypt without wrapper
         return encrypt(str, pattern, "%s");
     }
 
     @Override
-    public String decrypt(String str, Pattern pattern) {
+    public String decrypt(String str, String pattern) {
         // decrypt without wrapper
         return decrypt(str, pattern, "%s");
     }
 
     // wrapper - use String.format agreement
     @Override
-    public String encrypt(String str, Pattern pattern, String wrapper) {
-        Matcher matcher = pattern.matcher(str);
+    public String encrypt(String str, String pattern, String wrapper) {
+        Matcher matcher = Pattern.compile(pattern)
+                .matcher(str);
+
         while (matcher.find()) {
-            String dataToEncrypt = getDataGroup(matcher.group(), pattern);
+            String allMatch = matcher.group();
+            String dataToEncrypt = getDataGroup(allMatch, pattern);
             if (dataToEncrypt.isEmpty()) {
                 continue;
             }
@@ -100,39 +103,43 @@ class CryptoToolImpl implements CryptoTool {
 
     // wrapper - by String.format agreement
     @Override
-    public String decrypt(String str, Pattern pattern, String wrapper) {
-        Matcher matcher = pattern.matcher(str);
+    public String decrypt(String str, String pattern, String wrapper) {
+        Matcher matcher = Pattern.compile(pattern)
+                .matcher(str);
         while (matcher.find()) {
-            String dataToDecrypt = getDataGroup(matcher.group(), pattern);
+            String allMatch = matcher.group();
+            String dataToDecrypt = getDataGroup(allMatch, pattern);
             if (dataToDecrypt.isEmpty()) {
                 continue;
             }
-            str = StringUtils.replace(str, matcher.group(), String.format(wrapper, decrypt(dataToDecrypt)));
+            str = StringUtils.replace(str, allMatch, String.format(wrapper, decrypt(dataToDecrypt)));
         }
         return str;
     }
 
     // todo rename
     // check is string contains pattern - if yes, it need to be encrypted
-    public boolean isMarkedByPattern(String str, Pattern pattern) {
-        Matcher matcher = pattern.matcher(str);
-
-        try {
-            matcher.group("data");
-        } catch (IllegalArgumentException e) {
-            LOGGER.debug("There are no data group in pattern: {}", pattern);
+    public boolean isMarkedByPattern(String str, String pattern) {
+        Matcher matcher = Pattern.compile(pattern)
+                .matcher(str);
+        if (!matcher.find()) {
             return false;
         }
-
-        return matcher.find();
+        return true;
     }
 
-    private String getDataGroup(String str, Pattern pattern) {
-        if (!isMarkedByPattern(str, pattern)) {
-            LOGGER.warn("Data {} does not match pattern: {}", str, pattern);
-            return StringUtils.EMPTY;
+    private String getDataGroup(String str, String pattern) {
+        String data = StringUtils.EMPTY;
+        Matcher matcher = Pattern.compile(pattern)
+                .matcher(str);
+        if (!matcher.find()) {
+            return data;
         }
-        Matcher matcher = pattern.matcher(str);
-        return matcher.group("data");
+        try {
+            data = matcher.group("data");
+        } catch (IllegalArgumentException e) {
+            LOGGER.debug("There are no data group in pattern: {}", pattern);
+        }
+        return data;
     }
 }

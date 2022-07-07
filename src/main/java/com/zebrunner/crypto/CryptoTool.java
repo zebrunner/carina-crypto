@@ -30,7 +30,7 @@ public interface CryptoTool {
      * @return encrypted text
      * @see "https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html#groupname"
      */
-    String encrypt(String str, Pattern pattern);
+    String encrypt(String str, String pattern);
 
     /**
      * Decrypts all matches of text by pattern
@@ -42,7 +42,7 @@ public interface CryptoTool {
      * @return decrypted text
      * @see "https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html#groupname"
      */
-    String decrypt(String str, Pattern pattern);
+    String decrypt(String str, String pattern);
 
     /**
      * Encrypts all matches of text by pattern. Encrypted sections are wrapped according
@@ -57,7 +57,7 @@ public interface CryptoTool {
      * @see "https://docs.oracle.com/javase/8/docs/api/java/util/Formatter.html"
      * @see "https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html#groupname"
      */
-    String encrypt(String str, Pattern pattern, String wrapper);
+    String encrypt(String str, String pattern, String wrapper);
 
     /**
      * Decrypts all matches of text by pattern. Decrypted sections are wrapped according
@@ -71,7 +71,7 @@ public interface CryptoTool {
      * @return decrypted text
      * @see "https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html#groupname"
      */
-    String decrypt(String str, Pattern pattern, String wrapper);
+    String decrypt(String str, String pattern, String wrapper);
 
     /**
      * Checks for at least one match of text according to the pattern
@@ -81,5 +81,5 @@ public interface CryptoTool {
      * @return true if there are at least one match of text according to the pattern,
      *         and this pattern contains named group data, false otherwise
      */
-    boolean isMarkedByPattern(String str, Pattern pattern);
+    boolean isMarkedByPattern(String str, String pattern);
 }
