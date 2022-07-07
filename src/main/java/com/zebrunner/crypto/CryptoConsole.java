@@ -24,7 +24,7 @@ public class CryptoConsole {
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     public static final String DEFAULT_PATTERN = "\\{crypt:(?<data>.+)\\}";
-    public static final String DEFAULT_WRAPPER = "{crypto:%s}";
+    public static final String DEFAULT_WRAPPER = "{crypt:%s}";
 
     private static final String HELP_ARG = "help";
     private static final String ENCRYPT_ARG = "encrypt";
