@@ -28,12 +28,21 @@ public class CryptoToolTest {
     }
 
     @Test
-    public static void encryptTestWithValidWrapperAndValidStrAnd() {
+    public static void encryptTestWithWrapper() {
         String str = "{zebrunner:Zebrunner}";
         String pattern = "\\{zebrunner:(?<data>.+)\\}";
-        String encryptedStr = "Gy1n4N2oIy/iUfFeCNgjKA==";
-        Assert.assertEquals(CRYPTO_TOOL.encrypt(str, pattern), encryptedStr);
+        String wrapper = "[crypted-by-zebrunner:%s]";
+        String encryptedStr = "[crypted-by-zebrunner:Gy1n4N2oIy/iUfFeCNgjKA==]";
+        Assert.assertEquals(CRYPTO_TOOL.encrypt(str, pattern, wrapper), encryptedStr);
     }
 
+    @Test(expectedExceptions = { RuntimeException.class })
+    public static void encryptTestWithPatternWithoutDataGroup() {
+        String str = "{zebrunner:Zebrunner}";
+        String pattern = "\\{zebrunner:(.+)\\}";
+        String wrapper = "[crypted-by-zebrunner:%s]";
+        String encryptedStr = "[crypted-by-zebrunner:Gy1n4N2oIy/iUfFeCNgjKA==]";
+        Assert.assertEquals(CRYPTO_TOOL.encrypt(str, pattern, wrapper), encryptedStr);
+    }
 
 }

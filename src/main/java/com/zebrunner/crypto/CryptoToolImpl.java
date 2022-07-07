@@ -87,12 +87,12 @@ class CryptoToolImpl implements CryptoTool {
     // wrapper - use String.format agreement
     @Override
     public String encrypt(String str, String pattern, String wrapper) {
+        validatePattern(pattern);
         Matcher matcher = Pattern.compile(pattern)
                 .matcher(str);
 
         while (matcher.find()) {
-            String allMatch = matcher.group();
-            String dataToEncrypt = getDataGroup(allMatch, pattern);
+            String dataToEncrypt = getDataGroup(matcher.group(), pattern);
             if (dataToEncrypt.isEmpty()) {
                 continue;
             }
@@ -104,15 +104,16 @@ class CryptoToolImpl implements CryptoTool {
     // wrapper - by String.format agreement
     @Override
     public String decrypt(String str, String pattern, String wrapper) {
+        validatePattern(pattern);
         Matcher matcher = Pattern.compile(pattern)
                 .matcher(str);
+
         while (matcher.find()) {
-            String allMatch = matcher.group();
-            String dataToDecrypt = getDataGroup(allMatch, pattern);
+            String dataToDecrypt = getDataGroup(matcher.group(), pattern);
             if (dataToDecrypt.isEmpty()) {
                 continue;
             }
-            str = StringUtils.replace(str, allMatch, String.format(wrapper, decrypt(dataToDecrypt)));
+            str = StringUtils.replace(str, matcher.group(), String.format(wrapper, decrypt(dataToDecrypt)));
         }
         return str;
     }
@@ -120,6 +121,7 @@ class CryptoToolImpl implements CryptoTool {
     // todo rename
     // check is string contains pattern - if yes, it need to be encrypted
     public boolean isMarkedByPattern(String str, String pattern) {
+        validatePattern(pattern);
         Matcher matcher = Pattern.compile(pattern)
                 .matcher(str);
         if (!matcher.find()) {
@@ -129,17 +131,16 @@ class CryptoToolImpl implements CryptoTool {
     }
 
     private String getDataGroup(String str, String pattern) {
-        String data = StringUtils.EMPTY;
         Matcher matcher = Pattern.compile(pattern)
                 .matcher(str);
-        if (!matcher.find()) {
-            return data;
+        matcher.find();
+        return matcher.group("data");
+    }
+
+    private void validatePattern(String pattern) {
+        // Check is pattern contains data group
+        if (!pattern.contains("(?<data>")) {
+            throw new RuntimeException("There are no data group in pattern: " + pattern);
         }
-        try {
-            data = matcher.group("data");
-        } catch (IllegalArgumentException e) {
-            LOGGER.debug("There are no data group in pattern: {}", pattern);
-        }
-        return data;
     }
 }
