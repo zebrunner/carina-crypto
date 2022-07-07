@@ -23,8 +23,9 @@ public class CryptoConsole {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    public static final String DEFAULT_PATTERN = "\\{crypt:(?<data>.+)\\}";
+    public static final String DEFAULT_PATTERN = "\\{crypt:(?<data>.+?)\\}";
     public static final String DEFAULT_WRAPPER = "{crypt:%s}";
+    private static final String ENCRYPTED_FILE_POSTFIX = "_encrypted.";
 
     private static final String HELP_ARG = "help";
     private static final String ENCRYPT_ARG = "encrypt";
@@ -70,38 +71,10 @@ public class CryptoConsole {
                     .build();
 
             if (line.hasOption(FILE_ARG)) {
-                File inFile = new File(line.getOptionValue(FILE_ARG));
-                if (!inFile.exists()) {
-                    throw new RuntimeException(
-                            String.format("The file specified via the '%s' option does not exists. Path to file provided via option: %s",
-                                    FILE_ARG, line.getOptionValue(FILE_ARG)));
-                }
-
-                // todo refactor
-                File outFile = new File(StringUtils.replace(inFile.getAbsolutePath(), ".", "_encrypted."));
-                if (outFile.exists()) {
-                    if (!outFile.delete()) {
-                        throw new RuntimeException(
-                                String.format("The file specified via the '%s' option cannot be deleted. Path to file provided via option: %s",
-                                        FILE_ARG, line.getOptionValue(FILE_ARG)));
-                    }
-                }
-                outFile.createNewFile();
-
                 if (line.hasOption(ENCRYPT_ARG)) {
-                    FileUtils.writeByteArrayToFile(outFile,
-                            cryptoTool.encrypt(
-                                    new String(FileUtils.readFileToByteArray(inFile)),
-                                    parsePattern(line),
-                                    parseWrapper(line)).getBytes());
-                    LOGGER.info("Encrypted file saved by path: {}", outFile.getAbsolutePath());
+                    encryptFile(line, cryptoTool);
                 } else if (line.hasOption(DECRYPT_ARG)) {
-                    FileUtils.writeByteArrayToFile(outFile,
-                            cryptoTool.decrypt(
-                                    new String(FileUtils.readFileToByteArray(inFile)),
-                                    parsePattern(line),
-                                    parseWrapper(line)).getBytes());
-                    LOGGER.info("Decrypted file saved by path: {}", outFile.getAbsolutePath());
+                    decryptFile(line, cryptoTool);
                 } else {
                     throw new RuntimeException(String.format("Should be specified '%s' or '%s' options", ENCRYPT_ARG, DECRYPT_ARG));
                 }
@@ -130,6 +103,73 @@ public class CryptoConsole {
                     + "com.zebrunner.crypto.CryptoConsole -decrypt -file \"csv_file_to_decrypt\" -key_file \"key_file_path\" \n");
 
         }
+    }
+
+    private static void encryptFile(CommandLine line, CryptoTool cryptoTool) throws IOException {
+        File inFile = new File(line.getOptionValue(FILE_ARG));
+        if (!inFile.exists()) {
+            throw new RuntimeException(
+                    String.format("The file specified via the '%s' option does not exists. Path to file provided via option: %s",
+                            FILE_ARG, line.getOptionValue(FILE_ARG)));
+        }
+
+        if (inFile.getName().contains(ENCRYPTED_FILE_POSTFIX)) {
+            LOGGER.warn("File located on the path '{}'  contains '{}' in it's filename. There is a possibility that it was already encrypted",
+                    inFile.getAbsolutePath(), ENCRYPTED_FILE_POSTFIX);
+        }
+
+        // fixme implement replacement only in the file name, not in the entire path
+        File outFile = new File(StringUtils.replace(inFile.getAbsolutePath(), ".", ENCRYPTED_FILE_POSTFIX));
+        if (outFile.exists()) {
+            LOGGER.warn("The file located on the path: '{}' already exists. The existing file will be deleted", outFile.getAbsolutePath());
+            if (!outFile.delete()) {
+                throw new RuntimeException(
+                        String.format("The file specified via the '%s' option cannot be deleted. Path to file provided via option: %s",
+                                FILE_ARG, line.getOptionValue(FILE_ARG)));
+            }
+        }
+        outFile.createNewFile();
+
+        FileUtils.writeByteArrayToFile(outFile,
+                cryptoTool.encrypt(new String(FileUtils.readFileToByteArray(inFile)),
+                        parsePattern(line),
+                        parseWrapper(line))
+                        .getBytes());
+        LOGGER.info("Encrypted file saved by path: {}", outFile.getAbsolutePath());
+    }
+
+    private static void decryptFile(CommandLine line, CryptoTool cryptoTool) throws IOException {
+        File inFile = new File(line.getOptionValue(FILE_ARG));
+        if (!inFile.exists()) {
+            throw new RuntimeException(
+                    String.format("The file specified via the '%s' option does not exists. Path to file provided via option: %s",
+                            FILE_ARG, line.getOptionValue(FILE_ARG)));
+        }
+
+        if (!inFile.getName().contains(ENCRYPTED_FILE_POSTFIX)) {
+            LOGGER.warn("File located on the path '{}' is not contains '{}' in it's filename. There is a possibility that it was not encrypted",
+                    inFile.getAbsolutePath(), ENCRYPTED_FILE_POSTFIX);
+        }
+
+        // fixme implement replacement only in the file name, not in the entire path
+        File outFile = new File(StringUtils.replace(inFile.getAbsolutePath(), ENCRYPTED_FILE_POSTFIX, "."));
+        if (outFile.exists()) {
+            LOGGER.warn("The file located on the path: '{}' already exists. The existing file will be deleted", outFile.getAbsolutePath());
+            if (!outFile.delete()) {
+                throw new RuntimeException(
+                        String.format("The file specified via the '%s' option cannot be deleted. Path to file provided via option: %s",
+                                FILE_ARG, line.getOptionValue(FILE_ARG)));
+            }
+        }
+        outFile.createNewFile();
+
+        FileUtils.writeByteArrayToFile(outFile,
+                cryptoTool.decrypt(
+                        new String(FileUtils.readFileToByteArray(inFile)),
+                        parsePattern(line),
+                        parseWrapper(line))
+                        .getBytes());
+        LOGGER.info("Decrypted file saved by path: {}", outFile.getAbsolutePath());
     }
 
     private static Algorithm parseAlgorithmWithKeySize(CommandLine line) {
