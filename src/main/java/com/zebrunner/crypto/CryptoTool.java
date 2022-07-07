@@ -79,5 +79,5 @@ public interface CryptoTool {
      * @return true if there are at least one match of text according to the pattern,
      *         and this pattern contains named group data, false otherwise
      */
-    boolean isMarkedByPattern(String str, String pattern);
+    boolean hasMatch(String str, String pattern);
 }

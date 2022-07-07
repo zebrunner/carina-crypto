@@ -121,7 +121,7 @@ class CryptoToolImpl implements CryptoTool {
 
     // todo rename
     // check is string contains pattern - if yes, it need to be encrypted
-    public boolean isMarkedByPattern(String str, String pattern) {
+    public boolean hasMatch(String str, String pattern) {
         validatePattern(pattern);
         Matcher matcher = Pattern.compile(pattern)
                 .matcher(str);
