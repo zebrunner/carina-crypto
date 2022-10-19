@@ -23,6 +23,10 @@ import org.slf4j.LoggerFactory;
 public class CryptoConsole {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
+
+    private static final String DEFAULT_PATTERN = "\\{crypt:(?<data>.+?)\\}";
+    private static final String DEFAULT_WRAPPER = "{crypt:%s}";
+
     private static final String ENCRYPTED_FILE_POSTFIX = "_encrypted.";
 
     private static final String HELP_ARG = "help";
@@ -197,17 +201,17 @@ public class CryptoConsole {
     private static String parseWrapper(CommandLine line) {
         if (!line.hasOption(WRAPPER)) {
             LOGGER.warn("The wrapper is not specified. The default wrapper will be used: '{}'. To specify wrapper, use the option '{}'",
-                    CryptoTool.DEFAULT_WRAPPER, WRAPPER);
+                    DEFAULT_WRAPPER, WRAPPER);
         }
-        return line.hasOption(WRAPPER) ? line.getOptionValue(WRAPPER) : CryptoTool.DEFAULT_WRAPPER;
+        return line.hasOption(WRAPPER) ? line.getOptionValue(WRAPPER) : DEFAULT_WRAPPER;
     }
 
     private static String parsePattern(CommandLine line) {
         if (!line.hasOption(PATTERN)) {
             LOGGER.warn("The pattern is not specified. The default pattern will be used: '{}'. To specify pattern, use the option '{}'",
-                    CryptoTool.DEFAULT_PATTERN, PATTERN);
+                    DEFAULT_PATTERN, PATTERN);
         }
-        return line.hasOption(PATTERN) ? line.getOptionValue(PATTERN) : CryptoTool.DEFAULT_PATTERN;
+        return line.hasOption(PATTERN) ? line.getOptionValue(PATTERN) : DEFAULT_PATTERN;
 
     }
 
