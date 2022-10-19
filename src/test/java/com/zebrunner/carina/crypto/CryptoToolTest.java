@@ -16,8 +16,8 @@ public class CryptoToolTest {
                 .setKey(secretKey)
                 .build();
 
-        String encryptedStr = "Gy1n4N2oIy/iUfFeCNgjKA==";
-        Assert.assertEquals(encryptedStr, CRYPTO_TOOL.encrypt("Zebrunner"));
+        String encryptedStr = "fDuqYu8s19RgDcCl0Gwyqw==";
+        Assert.assertEquals(CRYPTO_TOOL.encrypt("Zebrunner"), encryptedStr);
     }
 
     @Test
@@ -29,7 +29,7 @@ public class CryptoToolTest {
                 .setKey(secretKey)
                 .build();
         Assert.assertEquals(CRYPTO_TOOL.encrypt("{zebrunner:Zebrunner}", "\\{zebrunner:(?<data>.+)\\}"),
-                "Gy1n4N2oIy/iUfFeCNgjKA==");
+                "fDuqYu8s19RgDcCl0Gwyqw==");
     }
 
     @Test
@@ -42,7 +42,7 @@ public class CryptoToolTest {
                 .build();
 
         Assert.assertEquals(CRYPTO_TOOL.encrypt("{zebrunner:Zebrunner}", "\\{zebrunner:(?<data>.+)\\}", "[crypted-by-zebrunner:%s]"),
-                "[crypted-by-zebrunner:Gy1n4N2oIy/iUfFeCNgjKA==]");
+                "[crypted-by-zebrunner:fDuqYu8s19RgDcCl0Gwyqw==]");
     }
 
     @Test(expectedExceptions = { RuntimeException.class })
@@ -100,7 +100,7 @@ public class CryptoToolTest {
     @Test
     public static void encyptDecryptWithAES_256_ECB_NO_PADDINGTest() throws NoSuchAlgorithmException {
         Algorithm algorithm = Algorithm.AES_256_ECB_NO_PADDING;
-        String srtToEncrypt = "2022-08-07-11:35 AES_256_E AES_256_E AES_256_E AES_256_E A ";
+        String srtToEncrypt = "TESTTESTTESTTEST";
         String secretKey = SecretKeyManager.generateKeyAsString(algorithm);
         CryptoTool cryptoTool = CryptoToolBuilder.builder()
                 .chooseAlgorithm(algorithm)
@@ -139,7 +139,7 @@ public class CryptoToolTest {
     @Test
     public static void encyptDecryptWithDES_56_ECB_NO_PADDINGTest() throws NoSuchAlgorithmException {
         Algorithm algorithm = Algorithm.DES_56_ECB_NO_PADDING;
-        String srtToEncrypt = "2022-08-07-11:35 DES_56";
+        String srtToEncrypt = "2022-08-07-11:35";
         String secretKey = SecretKeyManager.generateKeyAsString(algorithm);
         CryptoTool cryptoTool = CryptoToolBuilder.builder()
                 .chooseAlgorithm(algorithm)
@@ -152,7 +152,7 @@ public class CryptoToolTest {
     @Test
     public static void encyptDecryptWithDESEDE_168_ECB_NO_PADDINGTest() throws NoSuchAlgorithmException {
         Algorithm algorithm = Algorithm.DESEDE_168_ECB_NO_PADDING;
-        String srtToEncrypt = "2022-08-07-11:35 DESEDE_168_ECB_NO_PADDING";
+        String srtToEncrypt = "2022-08-07-11:35 DESEDE_168_ECB_";
         String secretKey = SecretKeyManager.generateKeyAsString(algorithm);
         CryptoTool cryptoTool = CryptoToolBuilder.builder()
                 .chooseAlgorithm(algorithm)
