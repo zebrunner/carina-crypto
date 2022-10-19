@@ -1,4 +1,4 @@
-package com.zebrunner.crypto;
+package com.zebrunner.carina.crypto;
 
 import java.security.NoSuchAlgorithmException;
 
@@ -8,7 +8,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
 
-class SecretKeyManager {
+public class SecretKeyManager {
 
     private SecretKeyManager() {
     }

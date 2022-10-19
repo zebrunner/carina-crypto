@@ -1,4 +1,4 @@
-package com.zebrunner.crypto;
+package com.zebrunner.carina.crypto;
 
 import java.lang.invoke.MethodHandles;
 import java.security.Key;

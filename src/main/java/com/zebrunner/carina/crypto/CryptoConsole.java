@@ -1,4 +1,4 @@
-package com.zebrunner.crypto;
+package com.zebrunner.carina.crypto;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -24,8 +24,9 @@ public class CryptoConsole {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
-    public static final String DEFAULT_PATTERN = "\\{crypt:(?<data>.+?)\\}";
-    public static final String DEFAULT_WRAPPER = "{crypt:%s}";
+    private static final String DEFAULT_PATTERN = "\\{crypt:(?<data>.+?)\\}";
+    private static final String DEFAULT_WRAPPER = "{crypt:%s}";
+
     private static final String ENCRYPTED_FILE_POSTFIX = "_encrypted.";
 
     private static final String HELP_ARG = "help";
@@ -96,20 +97,20 @@ public class CryptoConsole {
         } catch (IOException | ParseException | NoSuchAlgorithmException e) {
             LOGGER.error(e.getMessage());
             LOGGER.info("Usage examples: \n"
-                    + "com.zebrunner.crypto.CryptoConsole -help \n"
-                    + "com.zebrunner.crypto.CryptoConsole -generate -algorithm \"algorithm\" -keysize=\"key size\" \n"
-                    + "com.zebrunner.crypto.CryptoConsole -encrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -string=\"string_to_encrypt\" \n"
-                    + "com.zebrunner.crypto.CryptoConsole -encrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -string=\"string_to_encrypt\"  \n"
-                    + "com.zebrunner.crypto.CryptoConsole -encrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -pattern=\"pattern\" -string=\"string_to_encrypt\"  \n"
-                    + "com.zebrunner.crypto.CryptoConsole -encrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -wrapper=\"wrapper\" -string=\"string_to_encrypt\"  \n"
-                    + "com.zebrunner.crypto.CryptoConsole -encrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -pattern=\"pattern\" -wrapper=\"wrapper\" -string=\"string_to_encrypt\"  \n"
-                    + "com.zebrunner.crypto.CryptoConsole -decrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -string=\"string_to_encrypt\" \n"
-                    + "com.zebrunner.crypto.CryptoConsole -decrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -string=\"string_to_encrypt\"  \n"
-                    + "com.zebrunner.crypto.CryptoConsole -decrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -pattern=\"pattern\" -string=\"string_to_encrypt\"  \n"
-                    + "com.zebrunner.crypto.CryptoConsole -decrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -wrapper=\"wrapper\" -string=\"string_to_encrypt\"  \n"
-                    + "com.zebrunner.crypto.CryptoConsole -decrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -pattern=\"pattern\" -wrapper=\"wrapper\" -string=\"string_to_encrypt\"  \n"
-                    + "com.zebrunner.crypto.CryptoConsole -encrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -file=\"path_to_file_to_encrypt\" \n"
-                    + "com.zebrunner.crypto.CryptoConsole -decrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -file=\"path_to_file_to_encrypt\" \n");
+                    + "com.zebrunner.carina.crypto.CryptoConsole -help \n"
+                    + "com.zebrunner.carina.crypto.CryptoConsole -generate -algorithm \"algorithm\" -keysize=\"key size\" \n"
+                    + "com.zebrunner.carina.crypto.CryptoConsole -encrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -string=\"string_to_encrypt\" \n"
+                    + "com.zebrunner.carina.crypto.CryptoConsole -encrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -string=\"string_to_encrypt\"  \n"
+                    + "com.zebrunner.carina.crypto.CryptoConsole -encrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -pattern=\"pattern\" -string=\"string_to_encrypt\"  \n"
+                    + "com.zebrunner.carina.crypto.CryptoConsole -encrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -wrapper=\"wrapper\" -string=\"string_to_encrypt\"  \n"
+                    + "com.zebrunner.carina.crypto.CryptoConsole -encrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -pattern=\"pattern\" -wrapper=\"wrapper\" -string=\"string_to_encrypt\"  \n"
+                    + "com.zebrunner.carina.crypto.CryptoConsole -decrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -string=\"string_to_encrypt\" \n"
+                    + "com.zebrunner.carina.crypto.CryptoConsole -decrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -string=\"string_to_encrypt\"  \n"
+                    + "com.zebrunner.carina.crypto.CryptoConsole -decrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -pattern=\"pattern\" -string=\"string_to_encrypt\"  \n"
+                    + "com.zebrunner.carina.crypto.CryptoConsole -decrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -wrapper=\"wrapper\" -string=\"string_to_encrypt\"  \n"
+                    + "com.zebrunner.carina.crypto.CryptoConsole -decrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -pattern=\"pattern\" -wrapper=\"wrapper\" -string=\"string_to_encrypt\"  \n"
+                    + "com.zebrunner.carina.crypto.CryptoConsole -encrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -file=\"path_to_file_to_encrypt\" \n"
+                    + "com.zebrunner.carina.crypto.CryptoConsole -decrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -file=\"path_to_file_to_encrypt\" \n");
         }
     }
 
