@@ -52,10 +52,10 @@ public class CryptoToolBuilder {
 
     private void validate() {
         if (key == null && keyAsString.isEmpty()) {
-            throw new RuntimeException("The key must be passed!");
+            throw new IllegalArgumentException("The key must be passed!");
         }
         if (algorithm == null) {
-            throw new RuntimeException(("The algorithm must be chosen!"));
+            throw new IllegalArgumentException(("The algorithm must be chosen!"));
         }
     }
 

@@ -48,6 +48,6 @@ public enum Algorithm {
                 return algorithm;
             }
         }
-        throw new RuntimeException(String.format("There are no crypto algorithm with name: %s and key size %d", algorithmAsText, keySize));
+        throw new IllegalArgumentException(String.format("There are no crypto algorithm with name: %s and key size %d", algorithmAsText, keySize));
     }
 }
