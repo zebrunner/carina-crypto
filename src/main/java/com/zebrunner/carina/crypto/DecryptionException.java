@@ -1,4 +1,4 @@
-package com.zebrunner.crypto;
+package com.zebrunner.carina.crypto;
 
 class DecryptionException extends RuntimeException {
 

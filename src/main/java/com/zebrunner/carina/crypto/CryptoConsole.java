@@ -1,4 +1,4 @@
-package com.zebrunner.crypto;
+package com.zebrunner.carina.crypto;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -23,9 +23,6 @@ import org.slf4j.LoggerFactory;
 public class CryptoConsole {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
-
-    public static final String DEFAULT_PATTERN = "\\{crypt:(?<data>.+?)\\}";
-    public static final String DEFAULT_WRAPPER = "{crypt:%s}";
     private static final String ENCRYPTED_FILE_POSTFIX = "_encrypted.";
 
     private static final String HELP_ARG = "help";
@@ -96,20 +93,20 @@ public class CryptoConsole {
         } catch (IOException | ParseException | NoSuchAlgorithmException e) {
             LOGGER.error(e.getMessage());
             LOGGER.info("Usage examples: \n"
-                    + "com.zebrunner.crypto.CryptoConsole -help \n"
-                    + "com.zebrunner.crypto.CryptoConsole -generate -algorithm \"algorithm\" -keysize=\"key size\" \n"
-                    + "com.zebrunner.crypto.CryptoConsole -encrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -string=\"string_to_encrypt\" \n"
-                    + "com.zebrunner.crypto.CryptoConsole -encrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -string=\"string_to_encrypt\"  \n"
-                    + "com.zebrunner.crypto.CryptoConsole -encrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -pattern=\"pattern\" -string=\"string_to_encrypt\"  \n"
-                    + "com.zebrunner.crypto.CryptoConsole -encrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -wrapper=\"wrapper\" -string=\"string_to_encrypt\"  \n"
-                    + "com.zebrunner.crypto.CryptoConsole -encrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -pattern=\"pattern\" -wrapper=\"wrapper\" -string=\"string_to_encrypt\"  \n"
-                    + "com.zebrunner.crypto.CryptoConsole -decrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -string=\"string_to_encrypt\" \n"
-                    + "com.zebrunner.crypto.CryptoConsole -decrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -string=\"string_to_encrypt\"  \n"
-                    + "com.zebrunner.crypto.CryptoConsole -decrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -pattern=\"pattern\" -string=\"string_to_encrypt\"  \n"
-                    + "com.zebrunner.crypto.CryptoConsole -decrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -wrapper=\"wrapper\" -string=\"string_to_encrypt\"  \n"
-                    + "com.zebrunner.crypto.CryptoConsole -decrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -pattern=\"pattern\" -wrapper=\"wrapper\" -string=\"string_to_encrypt\"  \n"
-                    + "com.zebrunner.crypto.CryptoConsole -encrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -file=\"path_to_file_to_encrypt\" \n"
-                    + "com.zebrunner.crypto.CryptoConsole -decrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -file=\"path_to_file_to_encrypt\" \n");
+                    + "com.zebrunner.carina.crypto.CryptoConsole -help \n"
+                    + "com.zebrunner.carina.crypto.CryptoConsole -generate -algorithm \"algorithm\" -keysize=\"key size\" \n"
+                    + "com.zebrunner.carina.crypto.CryptoConsole -encrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -string=\"string_to_encrypt\" \n"
+                    + "com.zebrunner.carina.crypto.CryptoConsole -encrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -string=\"string_to_encrypt\"  \n"
+                    + "com.zebrunner.carina.crypto.CryptoConsole -encrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -pattern=\"pattern\" -string=\"string_to_encrypt\"  \n"
+                    + "com.zebrunner.carina.crypto.CryptoConsole -encrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -wrapper=\"wrapper\" -string=\"string_to_encrypt\"  \n"
+                    + "com.zebrunner.carina.crypto.CryptoConsole -encrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -pattern=\"pattern\" -wrapper=\"wrapper\" -string=\"string_to_encrypt\"  \n"
+                    + "com.zebrunner.carina.crypto.CryptoConsole -decrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -string=\"string_to_encrypt\" \n"
+                    + "com.zebrunner.carina.crypto.CryptoConsole -decrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -string=\"string_to_encrypt\"  \n"
+                    + "com.zebrunner.carina.crypto.CryptoConsole -decrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -pattern=\"pattern\" -string=\"string_to_encrypt\"  \n"
+                    + "com.zebrunner.carina.crypto.CryptoConsole -decrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -wrapper=\"wrapper\" -string=\"string_to_encrypt\"  \n"
+                    + "com.zebrunner.carina.crypto.CryptoConsole -decrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -pattern=\"pattern\" -wrapper=\"wrapper\" -string=\"string_to_encrypt\"  \n"
+                    + "com.zebrunner.carina.crypto.CryptoConsole -encrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -file=\"path_to_file_to_encrypt\" \n"
+                    + "com.zebrunner.carina.crypto.CryptoConsole -decrypt -algorithm \"algorithm\" -keysize=\"key size\" -key=\"key\" -file=\"path_to_file_to_encrypt\" \n");
         }
     }
 
@@ -200,17 +197,17 @@ public class CryptoConsole {
     private static String parseWrapper(CommandLine line) {
         if (!line.hasOption(WRAPPER)) {
             LOGGER.warn("The wrapper is not specified. The default wrapper will be used: '{}'. To specify wrapper, use the option '{}'",
-                    DEFAULT_WRAPPER, WRAPPER);
+                    CryptoTool.DEFAULT_WRAPPER, WRAPPER);
         }
-        return line.hasOption(WRAPPER) ? line.getOptionValue(WRAPPER) : DEFAULT_WRAPPER;
+        return line.hasOption(WRAPPER) ? line.getOptionValue(WRAPPER) : CryptoTool.DEFAULT_WRAPPER;
     }
 
     private static String parsePattern(CommandLine line) {
         if (!line.hasOption(PATTERN)) {
             LOGGER.warn("The pattern is not specified. The default pattern will be used: '{}'. To specify pattern, use the option '{}'",
-                    DEFAULT_PATTERN, PATTERN);
+                    CryptoTool.DEFAULT_PATTERN, PATTERN);
         }
-        return line.hasOption(PATTERN) ? line.getOptionValue(PATTERN) : DEFAULT_PATTERN;
+        return line.hasOption(PATTERN) ? line.getOptionValue(PATTERN) : CryptoTool.DEFAULT_PATTERN;
 
     }
 

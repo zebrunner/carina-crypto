@@ -1,4 +1,4 @@
-package com.zebrunner.crypto;
+package com.zebrunner.carina.crypto;
 
 import java.security.InvalidKeyException;
 import java.security.Key;

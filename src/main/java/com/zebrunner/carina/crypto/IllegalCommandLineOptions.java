@@ -1,4 +1,4 @@
-package com.zebrunner.crypto;
+package com.zebrunner.carina.crypto;
 
 class IllegalCommandLineOptions extends RuntimeException {
 

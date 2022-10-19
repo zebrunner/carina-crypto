@@ -1,6 +1,9 @@
-package com.zebrunner.crypto;
+package com.zebrunner.carina.crypto;
 
 public interface CryptoTool {
+
+    public static final String DEFAULT_PATTERN = "\\{crypt:(?<data>.+?)\\}";
+    public static final String DEFAULT_WRAPPER = "{crypt:%s}";
 
     /**
      * Encrypts data
