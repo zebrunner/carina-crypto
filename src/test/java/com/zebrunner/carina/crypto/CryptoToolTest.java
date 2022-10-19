@@ -1,11 +1,7 @@
-package com.zebrunner.crypto;
+package com.zebrunner.carina.crypto;
 
 import java.security.NoSuchAlgorithmException;
 
-import com.zebrunner.carina.crypto.Algorithm;
-import com.zebrunner.carina.crypto.CryptoTool;
-import com.zebrunner.carina.crypto.CryptoToolBuilder;
-import com.zebrunner.carina.crypto.SecretKeyManager;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
