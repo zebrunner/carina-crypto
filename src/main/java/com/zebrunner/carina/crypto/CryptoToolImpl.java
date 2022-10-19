@@ -1,4 +1,4 @@
-package com.zebrunner.crypto;
+package com.zebrunner.carina.crypto;
 
 import java.security.InvalidKeyException;
 import java.security.Key;
@@ -16,19 +16,16 @@ import org.apache.commons.lang3.StringUtils;
 
 class CryptoToolImpl implements CryptoTool {
 
-    protected Cipher cipher;
-    protected final Key key;
-    protected Algorithm algorithm;
+    private Cipher cipher;
+    private final Key key;
 
-    protected CryptoToolImpl(Algorithm algorithm, Key key) {
+    public CryptoToolImpl(Algorithm algorithm, Key key) {
         initCipher(algorithm);
-        this.algorithm = algorithm;
         this.key = key;
     }
 
-    protected CryptoToolImpl(Algorithm algorithm, String key) {
+    public CryptoToolImpl(Algorithm algorithm, String key) {
         initCipher(algorithm);
-        this.algorithm = algorithm;
         this.key = SecretKeyManager.getKeyFromString(algorithm, key);
     }
 
@@ -46,9 +43,9 @@ class CryptoToolImpl implements CryptoTool {
     public String encrypt(String str) {
         try {
             cipher.init(Cipher.ENCRYPT_MODE, key);
-            return new String(Base64.encodeBase64(cipher.doFinal(Base64.encodeBase64(str.getBytes()))));
+            return new String(Base64.encodeBase64(cipher.doFinal(str.getBytes())));
         } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
-            throw new RuntimeException(
+            throw new EncryptionException(
                     "Error while encrypting, check your crypto key or length of string! Try to choose algorithm with bigger key size", e);
         }
     }
@@ -57,9 +54,9 @@ class CryptoToolImpl implements CryptoTool {
     public String decrypt(String str) {
         try {
             cipher.init(Cipher.DECRYPT_MODE, key);
-            return new String(Base64.decodeBase64(cipher.doFinal(Base64.decodeBase64(str.getBytes()))));
+            return new String(cipher.doFinal(Base64.decodeBase64(str.getBytes())));
         } catch (InvalidKeyException | IllegalBlockSizeException | BadPaddingException e) {
-            throw new RuntimeException("Error while decrypting, check your crypto key! ", e);
+            throw new DecryptionException("Error while decrypting, check your crypto key! ", e);
         }
     }
 
@@ -105,27 +102,24 @@ class CryptoToolImpl implements CryptoTool {
         return str;
     }
 
+    @Override
     public boolean hasMatch(String str, String pattern) {
         validatePattern(pattern);
         Matcher matcher = Pattern.compile(pattern)
                 .matcher(str);
-        if (!matcher.find()) {
-            return false;
-        }
-        return true;
+        return matcher.find();
     }
 
     private String getDataGroup(String str, String pattern) {
         Matcher matcher = Pattern.compile(pattern)
                 .matcher(str);
-        matcher.find();
-        return matcher.group("data");
+        return matcher.find() ? matcher.group("data") : StringUtils.EMPTY;
     }
 
     private void validatePattern(String pattern) {
         // Check is pattern contains data group
         if (!pattern.contains("(?<data>")) {
-            throw new RuntimeException("There are no data group in pattern: " + pattern);
+            throw new IllegalArgumentException("There are no data group in pattern: " + pattern);
         }
     }
 }
