@@ -200,4 +200,28 @@ public class CryptoToolTest {
         String encryptedStr = cryptoTool.encrypt(srtToEncrypt);
         Assert.assertEquals(cryptoTool.decrypt(encryptedStr), srtToEncrypt);
     }
+
+    @Test
+    public void carinaTestDecryption() {
+        Algorithm algorithm = Algorithm.AES_ECB_PKCS5_PADDING;
+        String srtToDecrypt = "{crypt:8O9iA4+f3nMzz85szmvKmQ==}";
+        String secretKey = "OIujpEmIVZ0C9kOkXniFRw==";
+        CryptoTool cryptoTool = CryptoToolBuilder.builder()
+                .chooseAlgorithm(algorithm)
+                .setKey(secretKey)
+                .build();
+        Assert.assertEquals(cryptoTool.decrypt(srtToDecrypt, "\\{crypt:(?<data>.+?)\\}"), "EncryptMe");
+    }
+
+    @Test
+    public void carinaTestPartWithEncryption() {
+        Algorithm algorithm = Algorithm.AES_ECB_PKCS5_PADDING;
+        String srtToDecrypt = "test@gmail.com/{crypt:8O9iA4+f3nMzz85szmvKmQ==}";
+        String secretKey = "OIujpEmIVZ0C9kOkXniFRw==";
+        CryptoTool cryptoTool = CryptoToolBuilder.builder()
+                .chooseAlgorithm(algorithm)
+                .setKey(secretKey)
+                .build();
+        Assert.assertEquals(cryptoTool.decrypt(srtToDecrypt, "\\{crypt:(?<data>.+?)\\}"), "test@gmail.com/EncryptMe");
+    }
 }
