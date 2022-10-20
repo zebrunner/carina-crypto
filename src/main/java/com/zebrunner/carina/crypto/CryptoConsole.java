@@ -56,8 +56,9 @@ public class CryptoConsole {
             }
 
             if (line.hasOption(GENERATE_KEY_ARG)) {
-                Algorithm algorithm = parseAlgorithmWithKeySize(line);
-                String secretKey = SecretKeyManager.generateKeyAsString(algorithm);
+                Algorithm algorithm = parseAlgorithm(line);
+                int keySize = parseKeySize(line);
+                String secretKey = SecretKeyManager.generateKeyAsString(algorithm, keySize);
                 LOGGER.info("Secret key was successfully generated. Copy it:   {}", secretKey);
                 return;
             }
@@ -67,7 +68,7 @@ public class CryptoConsole {
             }
 
             CryptoTool cryptoTool = CryptoToolBuilder.builder()
-                    .chooseAlgorithm(parseAlgorithmWithKeySize(line))
+                    .chooseAlgorithm(parseAlgorithm(line))
                     .setKey(line.getOptionValue(KEY_ARG))
                     .build();
 
@@ -187,15 +188,18 @@ public class CryptoConsole {
         LOGGER.info("Decrypted file saved by path: {}", outFile.getAbsolutePath());
     }
 
-    private static Algorithm parseAlgorithmWithKeySize(CommandLine line) {
+    private static Algorithm parseAlgorithm(CommandLine line) {
         if (!line.hasOption(ALGORITHM)) {
             throw new IllegalCommandLineOptions("The algorithm is not specified. To specify algorithm, use the option " + ALGORITHM);
         }
+        return Algorithm.find(line.getOptionValue(ALGORITHM));
+    }
 
+    private static int parseKeySize(CommandLine line) {
         if (!line.hasOption(KEY_SIZE)) {
-            throw new IllegalCommandLineOptions("The key size is not specified. To specify algorithm, use the option " + KEY_SIZE);
+            throw new IllegalCommandLineOptions("The key size is not specified. To specify key size, use the option " + KEY_SIZE);
         }
-        return Algorithm.find(line.getOptionValue(ALGORITHM), Integer.parseInt(line.getOptionValue(KEY_SIZE)));
+        return Integer.parseInt(line.getOptionValue(KEY_SIZE));
     }
 
     private static String parseWrapper(CommandLine line) {
@@ -212,7 +216,6 @@ public class CryptoConsole {
                     DEFAULT_PATTERN, PATTERN);
         }
         return line.hasOption(PATTERN) ? line.getOptionValue(PATTERN) : DEFAULT_PATTERN;
-
     }
 
     private static Options getOptions() {
