@@ -9,7 +9,8 @@
     <artifactId>carina-crypto</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>Carina CryptoTool</name>
-    <description/>
+    <url>https://www.carina-core.io/</url>
+    <description>Carina Crypto Utilities</description>
     <packaging>jar</packaging>
 
     <licenses>
