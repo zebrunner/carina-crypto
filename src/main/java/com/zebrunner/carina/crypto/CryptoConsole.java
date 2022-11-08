@@ -15,8 +15,6 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.core.config.Configurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,8 +40,6 @@ public class CryptoConsole {
     private static final String PATTERN = "pattern";
 
     public static void main(String[] args) {
-        Configurator.setRootLevel(Level.INFO);
-
         CommandLineParser parser = new DefaultParser();
         Options options = getOptions();
         try {
