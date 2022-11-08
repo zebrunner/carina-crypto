@@ -324,8 +324,8 @@
 
     <distributionManagement>
         <repository>
-            <id>QPS_Nexus</id>
-            <name>Qaprosoft Releases</name>
+            <id>Maven_Nexus</id>
+            <name>Maven Releases</name>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
         </repository>
         <snapshotRepository>
