@@ -26,6 +26,9 @@ class CryptoToolImpl implements CryptoTool {
 
     public CryptoToolImpl(Algorithm algorithm, String key) {
         initCipher(algorithm);
+        if (key == null || key.isEmpty()) {
+            throw new IllegalArgumentException("The key must be passed!");
+        }
         this.key = SecretKeyManager.getKeyFromString(algorithm, key);
     }
 
