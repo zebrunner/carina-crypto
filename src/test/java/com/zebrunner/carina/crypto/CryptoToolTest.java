@@ -6,6 +6,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class CryptoToolTest {
+    public static int i = 0;
 
     @Test
     public static void encryptTest() {
